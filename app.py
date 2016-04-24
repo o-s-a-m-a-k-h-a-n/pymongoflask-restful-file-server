@@ -1,20 +1,36 @@
 # -*- coding: utf-8 -*-
-
+###########
+# imports #
+###########
 import json
 from flask import Flask, request, make_response
 from pymongo import MongoClient
 from gridfs import GridFS
 
+################
+# setup/config #
+################
+
+# set up Flask app and mongodb objects
 app = Flask(__name__)
 db = MongoClient().gfs_filestore
 gfs = GridFS(db)
-MAX_FILE_SIZE = db.configs.find_one({"name":"max_file_size"})['max_file_size']
 
+# gfs_filestore.configs collection is assume to have one document 'max_file_size'
+# with the maximum upload file size limit set by admin
+# if document is not configured properly, default max size to 50MB
+# TODO: create an admin endpoint to basic authenticate and change this value
+MAX_FILE_SIZE = db.configs.find_one({"name":"max_file_size"})['max_file_size'] if db.configs.find_one({"name":"max_file_size"}) else 50000000
+
+##########
+# routes #
+##########
 @app.route('/users', methods=['GET'])
 def users():
     user_list = db.users.find().count()
     return json.dumps({'results': MAX_FILE_SIZE}),200
 
+# upload route expecting a filename in route and file contents in data
 @app.route('/upload/<file_name>', methods=['POST'])
 def upload(file_name):
     uploaded_file = request.data
@@ -28,6 +44,7 @@ def upload(file_name):
     else:
         return json.dumps({'status': 'File exceeded allowed size limit'}), 500
 
+# download route returns contents for given filename if exists in gfs
 @app.route('/download/<file_name>')
 def download(file_name):
     gfs_file = gfs.find_one({'filename': file_name})
@@ -36,5 +53,8 @@ def download(file_name):
     response.headers["Content-Disposition"] = "attachment; filename={}".format(file_name)
     return response
 
+########
+# main #
+########
 if __name__ == '__main__':
     app.run(debug=True)
