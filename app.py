@@ -54,7 +54,6 @@ def users():
 # NOTE: not hashing or securing password to develop contrived app for demo/text purposes
 @app.route('/users', methods=['POST'])
 def new_user():
-    # TODO: link each file to user
     username = request.args.get('username')
     password = request.args.get('password')
     if username is None or password is None:
@@ -72,6 +71,7 @@ def new_user():
 @app.route('/upload/<file_name>', methods=['POST'])
 @auth.login_required
 def upload(file_name):
+    # TODO: link each file to user
     uploaded_file = request.data
     if len(uploaded_file) < MAX_FILE_SIZE:
         with gfs.new_file(filename=file_name) as fp:
@@ -87,6 +87,7 @@ def upload(file_name):
 @app.route('/download/<file_name>')
 @auth.login_required
 def download(file_name):
+    # TODO: get the username, check if the user object has such a file and return accordingly
     gfs_file = gfs.find_one({'filename': file_name})
     response = make_response(gfs_file.read())
     response.headers['Content-Type'] = 'application/octet-stream'
