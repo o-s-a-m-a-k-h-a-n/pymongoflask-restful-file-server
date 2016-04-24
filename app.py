@@ -33,11 +33,14 @@ MAX_FILE_SIZE = db.configs.find_one({"name":"max_file_size"})['max_file_size'] i
 def verify_password(username, password):
     # as this is the most secure fileserver in the world, we will just retrieve the
     # username and password information from db, if exists, and verify user. Yay!
-    record = db.users.find({"username":username})
-    if record.count() > 0:
-        pass
-    # TODO: verify username and password
-    return True
+    record = db.users.find_one({"username":username})
+    if record is not None:
+        if record['username'] == username and record['password'] == password:
+            print "VERIFIED"
+            return True
+        else:
+            print "Unauthorized Access"
+            return False
 
 
 
