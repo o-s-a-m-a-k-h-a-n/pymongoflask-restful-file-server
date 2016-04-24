@@ -54,6 +54,7 @@ def users():
 # NOTE: not hashing or securing password to develop contrived app for demo/text purposes
 @app.route('/users', methods=['POST'])
 def new_user():
+    # TODO: link each file to user
     username = request.args.get('username')
     password = request.args.get('password')
     if username is None or password is None:
