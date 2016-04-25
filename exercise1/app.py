@@ -112,4 +112,6 @@ if __name__ == '__main__':
     if db.users.find_one({'username':'admin'}) is None:
         db.users.insert({'username':'admin', 'password':'admin','admin':True})
     print "* Administrator Username: 'admin' Password: 'admin'"
+    if db.configs.find_one({'name':'max_file_size'}) is None:
+        db.configs.insert({'name':'max_file_size', 'max_file_size':MAX_FILE_SIZE})
     app.run(debug=True)
