@@ -27,3 +27,6 @@ _Assumes MongoDB instance running on default port/settings locally without auth.
 * password: ```admin```
 
 _More users can be made admin through record update in MongoDB_
+
+
+> I used MongoDB for this task as the JD mentioned MongoDB and I had wanted to learn it as a datastore to a Python app. The code may not be very idiomatic/Pythonic as I am still learning to be a polyglot :)
