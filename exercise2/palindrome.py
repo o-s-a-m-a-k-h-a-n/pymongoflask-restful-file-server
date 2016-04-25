@@ -3,10 +3,7 @@ import unittest
 def palindrome(input_string):
     input = input_string.upper()
     reversed = input[::-1]
-    if input == reversed:
-        return True
-    else:
-        return False
+    return (input == reversed)
 
 class TestPalindrome(unittest.TestCase):
 
