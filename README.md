@@ -2,6 +2,16 @@
 
 > RESTful API written using Python Flask to enable users to register and then upload/download their files to a MongoDB's GridFS
 
+#### To Run
+```bash
+pip install -r requirements.txt
+```
+
+```bash
+python app.py
+```
+
+
 ### RESTful Endpoints
 
 * ```POST /users?username=<new-username>&password=<new-password>``` *~>* register new user
